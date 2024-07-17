@@ -1,0 +1,121 @@
+Problem 3: Real-Time Traffic Monitoring System 
+Scenario:
+You are working on a project to develop a real-time traffic monitoring system for a smart city initiative. The system should provide real-time traffic updates and suggest alternative routes. 
+Tasks: 
+1. Model the data flow for fetching real-time traffic information from an external API and displaying it to the user. 
+2. Implement a Python application that integrates with a traffic monitoring API (e.g., Google Maps Traffic API) to fetch real-time traffic data. 
+3. Display current traffic conditions, estimated travel time, and any incidents or delays. 
+4. Allow users to input a starting point and destination to receive traffic updates and alternative routes. 
+Deliverables: 
+1.Data flow diagram illustrating the interaction between the application and the API.  
+2.Pseudocode and implementation of the traffic monitoring system. 
+3.Documentation of the API integration and the methods used to fetch and display traffic data.  4.Explanation of any assumptions made and potential improvements. 
+
+Pseudocode:
+
+function fetchTrafficData(apiKey, startPoint, endPoint):
+    url = "https://maps.googleapis.com/maps/api/directions/json"
+    params = {
+        'origin': startPoint,
+        'destination': endPoint,
+        'key': apiKey,
+        'departure_time': 'now',
+        'traffic_model': 'best_guess',
+        'alternatives': 'true'
+    }
+    try:
+        response = HTTP GET request to url with params
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print("Error fetching data:", response.status_code)
+            return None
+    except RequestException as e:
+        print("Request error:", e)
+        return None
+function displayTrafficData(data):
+    if data is None:
+        print("No data available.")
+        return  
+    routes = data['routes']
+    for i, route in enumerate(routes):
+        print(f"\nRoute {i + 1}:")
+        print(f"   - Distance: {route['legs'][0]['distance']['text']}")
+        print(f"   - Duration in current traffic: {route['legs'][0]['duration_in_traffic']['text']}")
+        print("   - Traffic conditions:")
+        for step in route['legs'][0]['steps']:
+            print(f"      - {step['html_instructions']}")
+apiKey = 'your_google_maps_api_key'
+startPoint = 'New York, NY'
+endPoint = 'Los Angeles, CA'
+trafficData = fetchTrafficData(apiKey, startPoint, endPoint)
+displayTrafficData(trafficData)
+
+
+PYTHON PROGRAM:
+
+import requests
+def fetch_traffic_data(api_key, start_point, end_point):
+    url = f'https://maps.googleapis.com/maps/api/directions/json?origin={start_point}&destination={end_point}&key={api_key}&departure_time=now&traffic_model=best_guess&alternatives=true'    
+    try:
+        response = requests.get(url)
+        data = response.json()        
+        if response.status_code == 200:
+            return data
+        else:
+            print(f"Error fetching data: {response.status_code}")
+            return None  
+    except requests.exceptions.RequestException as e:
+        print(f"Request error: {e}")
+        return None
+def display_traffic_data(data):
+    if data:
+        routes = data.get('routes', [])
+        for i, route in enumerate(routes, start=1):
+            print(f"\nRoute {i}:")
+            print(f"   - Distance: {route['legs'][0]['distance']['text']}")
+            print(f"   - Duration in current traffic: {route['legs'][0]['duration_in_traffic']['text']}")
+            print("   - Traffic conditions:")
+            for step in route['legs'][0]['steps']:
+                print(f"      - {step['html_instructions']}")
+if __name__ == "__main__":
+    api_key = 'your_google_maps_api_key'
+    start_point = 'New York, NY'
+    end_point = 'Los Angeles, CA'    
+    data = fetch_traffic_data(api_key, start_point, end_point)
+    display_traffic_data(data)
+
+
+OUTPUT 
+
+Route 1:
+ - Distance: 2,799 mi
+ - Duration in current traffic: 1 day 15 hours
+ - Traffic conditions:
+    - Head southwest on I-78 W
+    - Take exit 18B for I-95 S toward Delaware
+    - Merge onto I-95 S
+    - ...
+    - Continue on I-10 W to Los Angeles
+    - Merge onto I-10 W
+    - Take exit 7A toward US-101 N
+    - Merge onto US-101 N
+    - ...
+Route 2:
+ - Distance: 2,818 mi
+ - Duration in current traffic: 1 day 16 hours
+ - Traffic conditions:
+    - Head southwest on I-78 W
+    - Take exit 18B for I-95 S toward Delaware
+    - Merge onto I-95 S
+    - ...
+    - Continue on I-10 W to Los Angeles
+    - Merge onto I-10 W
+    - Take exit 4A for I-405 N toward Santa Monica
+    - Merge onto I-405 N
+    - ...
+... (if more alternative routes are returned)
+
+
+
+
