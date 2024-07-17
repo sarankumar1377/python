@@ -1,0 +1,191 @@
+Problem 2: Inventory Management System Optimization 
+Scenario: 
+You have been hired by a retail company to optimize their inventory management system. The company wants to minimize stockouts and overstock situations while maximizing inventory turnover and profitability. 
+Tasks: 
+1. Model the inventory system: Define the structure of the inventory system, including products, warehouses, and current stock levels. 
+2. Implement an inventory tracking application: Develop a Python application that tracks inventory levels in real-time and alerts when stock levels fall below a certain threshold. 
+3. Optimize inventory ordering: Implement algorithms to calculate optimal reorder points and quantities based on historical sales data, lead times, and demand forecasts. 
+4. Generate reports: Provide reports on inventory turnover rates, stockout occurrences, and cost implications of overstock situations. 
+5. User interaction: Allow users to input product IDs or names to view current stock levels, reorder recommendations, and historical data. 
+Deliverables: 
+1.Data Flow Diagram: Illustrate how data flows within the inventory management system, from input (e.g., sales data, inventory adjustments) to output (e.g., reorder alerts, reports).  2.Pseudocode and Implementation: Provide pseudocode and actual code demonstrating how inventory levels are tracked, reorder points are calculated, and reports are generated.  3.Documentation: Explain the algorithms used for reorder optimization, how historical data influences decisions, and any assumptions made (e.g., constant lead times).  User Interface: Develop a user-friendly interface for accessing inventory information, viewing reports, and receiving alerts.  
+4.Assumptions and Improvements: Discuss assumptions about demand patterns, supplier reliability, and potential improvements for the inventory management system's efficiency and accuracy. 
+
+Pseudocode:
+1. Define classes for Product and Warehouse.
+2. Create InventorySystem class to manage warehouses and products.
+3. Implement functions for updating stock levels and generating alerts.
+4. Implement reorder point and quantity calculations based on historical data.
+5. Develop user interface for interaction with the inventory system.
+
+ python program:
+
+class Product:
+    def __init__(self, product_id, name, category, current_stock, reorder_point, reorder_quantity, lead_time):
+        self.product_id = product_id
+        self.name = name
+        self.category = category
+        self.current_stock = current_stock
+        self.reorder_point = reorder_point
+        self.reorder_quantity = reorder_quantity
+        self.lead_time = lead_time
+        self.historical_sales = []
+    def add_sales_data(self, sales):
+        self.historical_sales.append(sales)
+        self.current_stock -= sales  # Update current stock after sale
+class Warehouse:
+    def __init__(self, warehouse_id, location):
+        self.warehouse_id = warehouse_id
+        self.location = location
+        self.products = {}
+    def add_product(self, product):
+        self.products[product.product_id] = product
+    def track_inventory(self):
+        print("\n--- Inventory Tracking ---")
+        for product in self.products.values():
+            if product.current_stock < product.reorder_point:
+                print(f"Reorder Alert for: {product.name}")
+                print(f"Current Stock: {product.current_stock}")
+                print(f"Recommended Order Quantity: {product.reorder_quantity}")
+            else:
+                print(f"{product.name} is sufficiently stocked.")
+    def generate_report(self):
+        print("\n--- Inventory Report ---")
+        for product in self.products.values():
+            print(f"Product: {product.name}")
+            print(f"Current Stock: {product.current_stock}")
+            print(f"Turnover Rate: {self.calculate_turnover_rate(product)}")
+    def calculate_turnover_rate(self, product):
+        total_sales = sum(product.historical_sales)
+        average_stock = (product.current_stock + product.current_stock) / 2
+        turnover_rate = total_sales / average_stock if average_stock > 0 else 0
+        return turnover_rate
+def calculate_eoq(annual_demand, ordering_cost, holding_cost):
+    if holding_cost > 0:
+        return (2 * annual_demand * ordering_cost / holding_cost) ** 0.5
+    return 0
+def main():
+    warehouse = Warehouse(1, "Main Warehouse")
+    product1 = Product(101, "Laptop", "Electronics", 15, 5, 20, 2)
+    product1.add_sales_data(3)
+    product1.add_sales_data(4)
+    product2 = Product(102, "Smartphone", "Electronics", 30, 10, 15, 3)
+    product2.add_sales_data(5)
+    product2.add_sales_data(6)
+    warehouse.add_product(product1)
+    warehouse.add_product(product2)
+    while True:
+        print("\nOptions:")
+        print("1. Track Inventory")
+        print("2. Generate Report")
+        print("3. Add Sales Data")
+        print("4. Calculate EOQ")
+        print("5. Exit")
+        choice = input("Select an option: ")
+        if choice == '1':
+            warehouse.track_inventory()
+        elif choice == '2':
+            warehouse.generate_report()
+        elif choice == '3':
+            product_id = int(input("Enter Product ID: "))
+            sales = int(input("Enter sales data: "))
+            if product_id in warehouse.products:
+                warehouse.products[product_id].add_sales_data(sales)
+                print("Sales data updated.")
+            else:
+                print("Product not found.")
+        elif choice == '4':
+            product_id = int(input("Enter Product ID: "))
+            if product_id in warehouse.products:
+                annual_demand = sum(warehouse.products[product_id].historical_sales)
+                ordering_cost = 50  # Example ordering cost
+                holding_cost = 2    # Example holding cost per unit
+                eoq = calculate_eoq(annual_demand, ordering_cost, holding_cost)
+                print(f"Optimal Order Quantity (EOQ) for {warehouse.products[product_id].name}: {eoq:.2f}")
+            else:
+                print("Product not found.")
+        elif choice == '5':
+            break
+        else:
+            print("Invalid option, try again.")
+if __name__ == "__main__":
+    main()
+
+
+
+OUTPUT
+
+Options:
+1. Track Inventory
+2. Generate Report
+3. Add Sales Data
+4. Calculate EOQ
+5. Exit
+Select an option: 1
+
+--- Inventory Tracking ---
+Laptop is sufficiently stocked.
+Smartphone is sufficiently stocked.
+
+Options:
+1. Track Inventory
+2. Generate Report
+3. Add Sales Data
+4. Calculate EOQ
+5. Exit
+Select an option: 2
+
+--- Inventory Report ---
+Product: Laptop
+Current Stock: 8
+Turnover Rate: 0.875
+Product: Smartphone
+Current Stock: 19
+Turnover Rate: 0.5789473684210527
+
+Options:
+1. Track Inventory
+2. Generate Report
+3. Add Sales Data
+4. Calculate EOQ
+5. Exit
+Select an option: 3
+Enter Product ID: 101
+Enter sales data: 5
+Sales data updated.
+
+Options:
+1. Track Inventory
+2. Generate Report
+3. Add Sales Data
+4. Calculate EOQ
+5. Exit
+Select an option: 2
+
+--- Inventory Report ---
+Product: Laptop
+Current Stock: 3
+Turnover Rate: 4.0
+Product: Smartphone
+Current Stock: 19
+Turnover Rate: 0.5789473684210527
+
+Options:
+1. Track Inventory
+2. Generate Report
+3. Add Sales Data
+4. Calculate EOQ
+5. Exit
+Select an option: 4
+Enter Product ID: 101
+Optimal Order Quantity (EOQ) for Laptop: 24.49
+
+Options:
+1. Track Inventory
+2. Generate Report
+3. Add Sales Data
+4. Calculate EOQ
+5. Exit
+Select an option: 5
+EXIT
+
