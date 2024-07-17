@@ -1,0 +1,75 @@
+Problem 4: Real-Time COVID-19 Statistics Tracker 
+Scenario: 
+You are developing a real-time COVID-19 statistics tracking application for a healthcare organization. The application should provide up-to-date information on COVID-19 cases, recoveries, and deaths for a specified region. 
+Tasks:
+
+1. Model the data flow for fetching COVID-19 statistics from an external API and displaying it to the user.
+ 2. Implement a Python application that integrates with a COVID-19 statistics API (e.g., disease.sh) to fetch real-time data. 
+3. Display the current number of cases, recoveries, and deaths for a specified region.
+4. Allow users to input a region (country, state, or city) and display the corresponding COVID-19 statistics. 
+Deliverables: 
+1.Data flow diagram illustrating the interaction between the application and the API.  
+2.Pseudocode and implementation of the COVID-19 statistics tracking application.  3.Documentation of the API integration and the methods used to fetch and display COVID19 4.data.  Explanation of any assumptions made and potential improvements. 
+
+Pseudocode:
+
+
+1.Define the API endpoint and key (if needed).
+2.Create a function to fetch COVID-19 statistics for a specified region.
+3.Create a user interface to accept the region as input.
+4.Display the fetched data to the user.
+
+
+Implementation:
+Here's a Python implementation using the requests library to fetch data from the disease.com API.
+
+import requests
+API_URL = "https://disease.sh/v3/covid-19"
+
+def get_covid_stats(region):
+    """
+    Fetch COVID-19 statistics for the specified region.   
+    Args:
+        region (str): The region (country, state, or city) to fetch data for.
+    Returns:
+        dict: A dictionary containing cases, recoveries, and deaths.
+    try:
+        response = requests.get(f"{API_URL}/all?region={region}")
+        response.raise_for_status()  
+        data = response.json()
+        stats = {
+            'cases': data.get('cases'),
+            'recovered': data.get('recovered'),
+            'deaths': data.get('deaths')
+        }
+        return stats
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
+def display_stats(stats):
+    Display the COVID-19 statistics.
+    Args:
+        stats (dict): A dictionary containing cases, recoveries, and deaths.
+    if stats:
+        print(f"Cases: {stats['cases']}")
+        print(f"Recoveries: {stats['recovered']}")
+        print(f"Deaths: {stats['deaths']}")
+    else:
+        print("No data available.")
+def main():
+    Main function to run the application.
+    region = input("Enter the region (country, state, or city): ")
+    stats = get_covid_stats(region)
+    display_stats(stats)
+if __name__ == "__main__":
+    main()
+
+OUTPUT
+
+Enter the region (country, state, or city): India
+Cases: 704753890
+Recoveries: 675619811
+Deaths: 7010681
+
+
+
