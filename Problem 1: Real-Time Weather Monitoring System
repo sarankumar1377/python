@@ -1,0 +1,62 @@
+Problem 1: Real-Time Weather Monitoring System 
+Scenario:    
+ You are developing a real-time weather monitoring system for a weather forecasting company. The system needs to fetch and display weather data for a specified location.
+Tasks:
+1. Model the data flow for fetching weather information from an external API and displaying it to the user. 
+2. Implement a Python application that integrates with a weather API (e.g., OpenWeatherMap) to fetch real-time weather data. 
+3. Display the current weather information, including temperature, weather conditions, humidity, and wind speed.
+ 4. Allow users to input the location (city name or coordinates) and display the corresponding weather data.
+Deliverables:
+1.Data flow diagram illustrating the interaction between the application and the API.  2.Pseudocode and implementation of the weather monitoring system.  
+3.Documentation of the API integration and the methods used to fetch and display weather data. 
+4.Explanation of any assumptions made and potential improvements.
+
+Pseudocode:
+       outline the pseudocode for the weather monitoring system.
+1. Start 
+2. Prompt the user to enter a location (city name or coordinates) 
+3. Read the user input 
+4. Format the input into an API request URL 
+5. Send an HTTP GET request to the weather API using the formatted URL 
+6. Receive the response from the weather API 
+7. Parse the JSON response to extract temperature, weather conditions, humidity, and wind speed 
+8. Display the extracted weather information to the user 
+9. End
+With this, we can move on to the implementation in Python, integrating with the OpenWeatherMap API.
+
+Implement the Python code:
+
+import requests
+def get_weather_data(location):
+    api_key = "b11f2fe52244a66eb93ee793f28c2d3b"  
+    base_url = "http://api.openweathermap.org/data/2.5/weather?"
+    complete_url = base_url + "q=" + location + "&appid=" + api_key
+    response = requests.get(complete_url)
+    return response.json()
+def display_weather_data(weather_data):
+    if weather_data['cod'] != '404':
+        main = weather_data['main']
+        wind = weather_data['wind']
+        weather_description = weather_data['weather'][0]['description']
+        print(f"Temperature: {main['temp']}K")
+        print(f"Humidity: {main['humidity']}%")
+        print(f"Weather Description: {weather_description}")
+        print(f"Wind Speed: {wind['speed']} m/s")
+    else:
+        print("City Not Found")
+if __name__ == "__main__":
+    location = input("Enter the city name: ")
+    weather_data = get_weather_data(location)
+    display_weather_data(weather_data)
+
+OUTPUT:
+
+Enter the city name: Tamil Nadu
+Temperature: 300.28K
+Humidity: 68%
+Weather Description: overcast clouds
+Wind Speed: 10.54 m/s
+
+
+
+
